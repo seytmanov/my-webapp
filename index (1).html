@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="words.js"></script>
+<title>Lug'at</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one narrow study column. Header with progress and filters, four modes below (cards, test, typing, list). */
+:root {
+  --bg: #f1f6fd;
+  --surface: #ffffff;
+  --surface-2: #e7f0fc;
+  --line: #d3e1f5;
+  --ink: #1c2b44;
+  --muted: #5c7094;
+  --accent: #2f6fde;
+  --accent-ink: #ffffff;
+  --accent-soft: #dce9fd;
+  --good: #1c8f62;
+  --good-soft: #d9f4e8;
+  --bad: #cf4a4a;
+  --bad-soft: #fbe0e0;
+  --shadow: 0 1px 2px rgba(40, 80, 140, .08), 0 6px 18px rgba(40, 80, 140, .08);
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101a2b; --surface: #17233a; --surface-2: #1d2c47; --line: #2b3d5c;
+    --ink: #e6eefc; --muted: #93a8cb; --accent: #6ea2ff; --accent-ink: #0e1b33; --accent-soft: #22385e;
+    --good: #4cc995; --good-soft: #17382d; --bad: #ff8a8a; --bad-soft: #3d2227;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101a2b; --surface: #17233a; --surface-2: #1d2c47; --line: #2b3d5c;
+  --ink: #e6eefc; --muted: #93a8cb; --accent: #6ea2ff; --accent-ink: #0e1b33; --accent-soft: #22385e;
+  --good: #4cc995; --good-soft: #17382d; --bad: #ff8a8a; --bad-soft: #3d2227;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-block: 20px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-family: var(--font-display); font-size: 1.9rem; line-height: 1.1; margin: 0; text-wrap: balance; }
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.head { display: grid; gap: 12px; }
+.head-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.count { color: var(--muted); font-size: .95rem; font-variant-numeric: tabular-nums; }
+.count b { color: var(--ink); font-size: 1.1rem; }
+.bar { height: 10px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--good); border-radius: 99px; transition: width .3s; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.controls select, .seg, .chk {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-height: 40px;
+}
+.controls select { padding: 0 10px; }
+.seg { display: inline-flex; padding: 3px; gap: 3px; }
+.seg button { border: 0; background: transparent; padding: 0 12px; border-radius: 7px; min-height: 32px; color: var(--muted); font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.chk { display: inline-flex; align-items: center; gap: 8px; padding: 0 12px; cursor: pointer; }
+.chk input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+.tabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.tabs button { border: 0; background: transparent; padding: 8px 14px; border-radius: 9px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.tabs button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); }
+
+.panel { display: grid; gap: 14px; }
+.meta { display: flex; justify-content: space-between; color: var(--muted); font-size: .92rem; font-variant-numeric: tabular-nums; }
+
+/* flip card */
+.card { perspective: 1200px; }
+.card-in { position: relative; min-height: 260px; transition: transform .45s; transform-style: preserve-3d; cursor: pointer; }
+.card.flip .card-in { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
+  display: grid; place-items: center; align-content: center; gap: 10px; padding: 24px; text-align: center;
+}
+.face.back { transform: rotateY(180deg); background: var(--accent-soft); }
+.tag { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.word { font-family: var(--font-display); font-size: clamp(2rem, 9vw, 3rem); line-height: 1.1; overflow-wrap: anywhere; }
+.tr { font-size: clamp(1.25rem, 5vw, 1.7rem); font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.hint { color: var(--muted); font-size: .9rem; }
+.speak { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 4px 14px; min-height: 36px; font-weight: 600; color: var(--accent); }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; min-height: 50px; padding: 0 16px; font-weight: 700; }
+.btn.good { background: var(--good-soft); border-color: transparent; color: var(--good); }
+.btn.bad { background: var(--bad-soft); border-color: transparent; color: var(--bad); }
+.btn.primary { background: var(--accent); border-color: transparent; color: var(--accent-ink); }
+.btn.wide { grid-column: 1 / -1; }
+
+/* quiz */
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 22px; display: grid; gap: 6px; text-align: center; }
+.opts { display: grid; gap: 10px; }
+.opt { text-align: left; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 16px; min-height: 52px; font-weight: 600; overflow-wrap: anywhere; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt.right { background: var(--good-soft); border-color: var(--good); color: var(--good); }
+.opt.wrong { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.opt:disabled { cursor: default; }
+
+/* typing */
+.field { display: flex; gap: 10px; }
+.field input { flex: 1; min-width: 0; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; min-height: 50px; padding: 0 14px; font-size: 1.1rem; }
+.field input.right { border-color: var(--good); background: var(--good-soft); }
+.field input.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.verdict { min-height: 1.6em; font-weight: 700; text-align: center; }
+.verdict.right { color: var(--good); }
+.verdict.wrong { color: var(--bad); }
+
+/* summary */
+.sum { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 24px; text-align: center; display: grid; gap: 10px; }
+.sum .big { font-family: var(--font-display); font-size: 2.6rem; line-height: 1; }
+.miss { text-align: left; display: grid; gap: 6px; margin: 4px 0; }
+.miss div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--surface-2); border-radius: 10px; }
+.miss span:last-child { color: var(--muted); text-align: right; }
+
+/* list */
+.tbl { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+.li { display: grid; grid-template-columns: 34px minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line); }
+.li:first-child { border-top: 0; }
+.li input { width: 20px; height: 20px; accent-color: var(--good); }
+.li .en { font-weight: 700; overflow-wrap: anywhere; }
+.li .uz { color: var(--muted); overflow-wrap: anywhere; }
+.li.known .en { color: var(--good); }
+.cell.hid { filter: blur(7px); cursor: pointer; user-select: none; }
+.def { color: var(--muted); font-style: italic; font-size: .98rem; overflow-wrap: anywhere; }
+.empty { text-align: center; color: var(--muted); padding: 40px 10px; display: grid; gap: 12px; justify-items: center; }
+@media (max-width: 460px) { .li { grid-template-columns: 30px minmax(0, 1fr); } .li .uz { grid-column: 2; margin-top: -6px; } }
+@media (prefers-reduced-motion: reduce) { .card-in, .bar > i { transition: none; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="head-top">
+      <h1>Lug'at</h1>
+      <div class="count">Yodlandi: <b id="kn">0</b> / <span id="tt">32</span></div>
+    </div>
+    <div class="bar" role="progressbar" aria-label="Yodlash jarayoni" aria-valuemin="0" aria-valuemax="100"><i id="bar"></i></div>
+    <div class="controls">
+      <select id="dict" aria-label="Lug'at"></select>
+      <select id="pool" aria-label="So'zlar to'plami"></select>
+      <div class="seg" id="dir" role="group" aria-label="Yo'nalish">
+        <button type="button" data-dir="en">EN → UZ</button>
+        <button type="button" data-dir="uz">UZ → EN</button>
+      </div>
+      <label class="chk" for="shuf"><input type="checkbox" id="shuf"> Aralashtirish</label>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-mode="cards">Kartalar</button>
+    <button role="tab" data-mode="quiz">Test</button>
+    <button role="tab" data-mode="write">Yozish</button>
+    <button role="tab" data-mode="list">Ro'yxat</button>
+  </nav>
+
+  <main class="panel" id="main"></main>
+</div>
+
+<script>
+if (!window.DICTS_DATA || !window.DICTS_DATA.length) {
+  document.getElementById("main").innerHTML = "<div class=\"empty\">words.js fayli topilmadi. U index.html bilan bir papkada turishi kerak.</div>";
+  throw new Error("words.js topilmadi");
+}
+const DICTS = {};
+let LAST = "";
+window.DICTS_DATA.forEach(d => {
+  DICTS[d.id] = { name: d.name, words: d.words.map((w, i) => [w[0], w[1], Math.floor(i / 10), w[2] || ""]) };
+  LAST = d.id;
+});
+let WORDS = [];
+const KEY = "lugat-v1";
+const S = { known: {}, knownAll: { a: {}, b: {} }, dict: LAST, pool: "all", dir: "en", shuffle: false, mode: "cards", hide: "none" };
+try {
+  const r = JSON.parse(localStorage.getItem(KEY) || "{}");
+  if (r.knownAll) S.knownAll = Object.assign({ a: {}, b: {} }, r.knownAll);
+  if (r.dict && DICTS[r.dict]) S.dict = r.dict;
+  ["pool", "dir", "shuffle"].forEach(k => { if (r[k] !== undefined) S[k] = r[k]; });
+} catch (e) {}
+function setDict(id) { S.dict = id; WORDS = DICTS[id].words; S.known = S.knownAll[id] = S.knownAll[id] || {}; }
+if (!DICTS[S.dict]) S.dict = LAST;
+setDict(S.dict);
+if (S.pool !== "all" && S.pool !== "hard" && !WORDS.some(w => S.pool === "c" + w[2])) S.pool = "all";
+function save() { try { localStorage.setItem(KEY, JSON.stringify({ knownAll: S.knownAll, dict: S.dict, pool: S.pool, dir: S.dir, shuffle: S.shuffle })); } catch (e) {} }
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function speak(w) { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
+
+let D = [], C, Q, W;
+function poolWords() {
+  return WORDS.filter(w => S.pool === "all" || (S.pool === "hard" && !S.known[w[0]]) || S.pool === "c" + w[2]);
+}
+function reset() {
+  D = poolWords(); if (S.shuffle) D = shuffle(D);
+  C = { i: 0, flip: false, got: 0, again: 0 };
+  Q = { i: 0, score: 0, sel: null, wrong: [], opts: [] }; makeOpts();
+  W = { i: 0, score: 0, state: null, wrong: [], hint: false };
+  render();
+}
+let poolSig = "";
+function buildSelects() {
+  const dsel = $("#dict");
+  if (!dsel.options.length) dsel.innerHTML = Object.keys(DICTS).map(k => `<option value="${esc(k)}">${esc(DICTS[k].name)}</option>`).join("");
+  const sig = S.dict + ":" + WORDS.length;
+  if (sig !== poolSig) {
+    poolSig = sig;
+    let o = `<option value="all">Hammasi (${WORDS.length})</option>`;
+    if (WORDS.length > 10) for (let c = 0; c * 10 < WORDS.length; c++) {
+      const from = c * 10 + 1, to = Math.min(WORDS.length, (c + 1) * 10);
+      o += `<option value="c${c}">${from}–${to} (${to - from + 1})</option>`;
+    }
+    o += `<option value="hard">Yodlanmaganlar</option>`;
+    $("#pool").innerHTML = o;
+  }
+  dsel.value = S.dict; $("#pool").value = S.pool;
+}
+function head() {
+  const n = WORDS.filter(w => S.known[w[0]]).length;
+  $("#kn").textContent = n; $("#tt").textContent = WORDS.length;
+  $("#bar").style.width = (n / WORDS.length * 100) + "%";
+  $(".bar").setAttribute("aria-valuenow", Math.round(n / WORDS.length * 100));
+  buildSelects(); $("#shuf").checked = S.shuffle;
+  document.querySelectorAll("#dir button").forEach(b => b.setAttribute("aria-pressed", b.dataset.dir === S.dir));
+  document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.mode === S.mode));
+}
+function emptyView() {
+  return `<div class="empty"><div>Bu to'plamda so'z qolmadi. Hammasi yodlangan.</div><button class="btn primary" data-act="all">Hammasini ko'rsatish</button></div>`;
+}
+function summaryView(title, big, extra, again) {
+  return `<div class="sum"><div class="tag">${title}</div><div class="big">${big}</div>${extra}
+    <div class="row"><button class="btn primary" data-act="restart">Qayta boshlash</button>${again || ""}</div></div>`;
+}
+
+/* ---- cards ---- */
+const dfn = w => w[3] ? `<div class="def">${esc(w[3])}</div>` : "";
+function viewCards() {
+  if (!D.length) return emptyView();
+  if (C.i >= D.length) {
+    return summaryView("Tugadi", `${C.got} / ${D.length}`, `<div class="hint">${C.got} ta so'z yodlandi, ${C.again} tasini takrorlash kerak.</div>`,
+      C.again ? `<button class="btn" data-act="hardonly">Takrorlanadiganlar</button>` : "");
+  }
+  const w = D[C.i], en = S.dir === "en";
+  const frontEn = en, front = en ? w[0] : w[1], back = en ? w[1] : w[0];
+  const sp = `<button class="speak" data-act="speak" data-w="${esc(w[0])}" aria-label="Talaffuzni eshitish">&#128266; Eshitish</button>`;
+  const faceF = frontEn ? `<div class="tag">Inglizcha</div><div class="word">${esc(front)}</div>${sp}` : `<div class="tag">O'zbekcha</div><div class="tr">${esc(front)}</div>`;
+  const faceB = frontEn ? `<div class="tag">O'zbekcha</div><div class="tr">${esc(back)}</div>${dfn(w)}` : `<div class="tag">Inglizcha</div><div class="word">${esc(back)}</div>${dfn(w)}${sp}`;
+  return `<div class="meta"><span>${C.i + 1} / ${D.length}</span><span>Kartani bosing yoki Space</span></div>
+  <div class="card ${C.flip ? "flip" : ""}"><div class="card-in" data-act="flip"><div class="face">${faceF}</div><div class="face back">${faceB}</div></div></div>
+  <div class="row"><button class="btn bad" data-act="again">Yana takrorlayman</button><button class="btn good" data-act="got">Yodladim</button></div>`;
+}
+
+/* ---- quiz ---- */
+function makeOpts() {
+  const w = D[Q.i]; if (!w) return;
+  const k = S.dir === "en" ? 1 : 0;
+  const others = shuffle(WORDS.filter(x => x !== w && x[k] !== w[k])).slice(0, 3).map(x => x[k]);
+  Q.opts = shuffle([w[k], ...others]); Q.correct = w[k]; Q.sel = null;
+}
+function viewQuiz() {
+  if (!D.length) return emptyView();
+  if (Q.i >= D.length) {
+    const miss = Q.wrong.map(w => `<div><span>${esc(w[0])}</span><span>${esc(w[1])}</span></div>`).join("");
+    return summaryView("Natija", `${Q.score} / ${D.length}`, Q.wrong.length ? `<div class="miss">${miss}</div>` : `<div class="hint">Xatosiz. Zo'r natija.</div>`,
+      Q.wrong.length ? `<button class="btn" data-act="qwrong">Xatolarni qayta yechish</button>` : "");
+  }
+  const w = D[Q.i], en = S.dir === "en", done = Q.sel !== null;
+  const opts = Q.opts.map((o, i) => {
+    let cls = ""; if (done) { if (o === Q.correct) cls = "right"; else if (i === Q.sel) cls = "wrong"; }
+    return `<button class="opt ${cls}" data-act="pick" data-i="${i}" ${done ? "disabled" : ""}>${esc(o)}</button>`;
+  }).join("");
+  return `<div class="meta"><span>${Q.i + 1} / ${D.length}</span><span>To'g'ri: ${Q.score}</span></div>
+  <div class="q"><div class="tag">${en ? "Inglizcha so'zning ma'nosi?" : "Inglizcha so'zni toping"}</div>
+  ${en ? `<div class="word">${esc(w[0])}</div>${dfn(w)}<div><button class="speak" data-act="speak" data-w="${esc(w[0])}">&#128266; Eshitish</button></div>` : `<div class="tr">${esc(w[1])}</div>${dfn(w)}`}</div>
+  <div class="opts">${opts}</div>
+  ${done ? `<button class="btn primary" data-act="qnext">${Q.i + 1 >= D.length ? "Natijani ko'rish" : "Keyingisi"}</button>` : ""}`;
+}
+
+/* ---- write ---- */
+function viewWrite() {
+  if (!D.length) return emptyView();
+  if (W.i >= D.length) {
+    const miss = W.wrong.map(w => `<div><span>${esc(w[0])}</span><span>${esc(w[1])}</span></div>`).join("");
+    return summaryView("Natija", `${W.score} / ${D.length}`, W.wrong.length ? `<div class="miss">${miss}</div>` : `<div class="hint">Hammasini to'g'ri yozdingiz.</div>`,
+      W.wrong.length ? `<button class="btn" data-act="wwrong">Xatolarni qayta yozish</button>` : "");
+  }
+  const w = D[W.i], st = W.state;
+  const hint = W.hint && !st ? `${w[0][0]}${"_ ".repeat(w[0].length - 1).trim()} (${w[0].length} harf)` : "";
+  return `<div class="meta"><span>${W.i + 1} / ${D.length}</span><span>To'g'ri: ${W.score}</span></div>
+  <div class="q"><div class="tag">Inglizchasini yozing</div><div class="tr">${esc(w[1])}</div>${dfn(w)}<div class="hint">${esc(hint)}</div></div>
+  <div class="field"><input id="ans" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Javob" class="${st || ""}" ${st ? "readonly" : ""}>
+  <button class="btn primary" data-act="${st ? "wnext" : "check"}">${st ? "Keyingisi" : "Tekshirish"}</button></div>
+  <div class="verdict ${st || ""}">${st === "right" ? "To'g'ri" : st === "wrong" ? "To'g'ri javob: " + esc(w[0]) : ""}</div>
+  ${st ? "" : `<button class="btn" data-act="hint">Maslahat</button>`}`;
+}
+
+/* ---- list ---- */
+function viewList() {
+  const list = poolWords();
+  const seg = ["none", "Hammasi", "en", "Inglizchani yashir", "uz", "O'zbekchani yashir"];
+  const btns = []; for (let i = 0; i < seg.length; i += 2) btns.push(`<button type="button" data-act="hide" data-v="${seg[i]}" aria-pressed="${S.hide === seg[i]}">${seg[i + 1]}</button>`);
+  const rows = list.map(w => `<div class="li ${S.known[w[0]] ? "known" : ""}">
+    <input type="checkbox" data-act="mark" data-w="${esc(w[0])}" ${S.known[w[0]] ? "checked" : ""} aria-label="${esc(w[0])} yodlandi">
+    <div class="en cell ${S.hide === "en" ? "hid" : ""}" data-act="reveal">${esc(w[0])} <button class="speak" data-act="speak" data-w="${esc(w[0])}" aria-label="Eshitish" style="min-height:28px;padding:0 8px">&#128266;</button></div>
+    <div class="uz cell ${S.hide === "uz" ? "hid" : ""}" data-act="reveal">${esc(w[1])}${dfn(w)}</div></div>`).join("");
+  return `<div class="meta"><span>Katakchani belgilang: yodlandi</span><span>${list.length} ta so'z</span></div>
+  <div class="seg" style="justify-self:start;flex-wrap:wrap">${btns.join("")}</div>
+  <div class="tbl">${rows || `<div class="empty">So'z yo'q</div>`}</div>`;
+}
+
+function render() {
+  head();
+  $("#main").innerHTML = ({ cards: viewCards, quiz: viewQuiz, write: viewWrite, list: viewList })[S.mode]();
+  const a = $("#ans"); if (a && !W.state) a.focus({ preventScroll: true });
+}
+
+/* ---- actions ---- */
+function nextCard(ok) {
+  const w = D[C.i]; if (!w) return;
+  S.known[w[0]] = ok; save(); ok ? C.got++ : C.again++; C.i++; C.flip = false; render();
+}
+function checkAnswer() {
+  const w = D[W.i], v = ($("#ans").value || "").trim().toLowerCase();
+  if (!v) return;
+  if (v === w[0]) { W.state = "right"; W.score++; S.known[w[0]] = true; }
+  else { W.state = "wrong"; W.wrong.push(w); S.known[w[0]] = false; }
+  save(); render();
+}
+const actions = {
+  flip() { C.flip = !C.flip; document.querySelector(".card").classList.toggle("flip", C.flip); },
+  got() { nextCard(true); }, again() { nextCard(false); },
+  speak(el) { speak(el.dataset.w); },
+  restart() { reset(); },
+  all() { S.pool = "all"; save(); reset(); },
+  hardonly() { S.pool = "hard"; save(); reset(); },
+  pick(el) {
+    if (Q.sel !== null) return;
+    Q.sel = +el.dataset.i; const w = D[Q.i];
+    if (Q.opts[Q.sel] === Q.correct) { Q.score++; S.known[w[0]] = true; } else { Q.wrong.push(w); S.known[w[0]] = false; }
+    save(); render();
+  },
+  qnext() { Q.i++; makeOpts(); render(); },
+  qwrong() { D = Q.wrong.slice(); Q = { i: 0, score: 0, sel: null, wrong: [], opts: [] }; makeOpts(); render(); },
+  check() { checkAnswer(); },
+  wnext() { W.i++; W.state = null; W.hint = false; render(); },
+  wwrong() { D = W.wrong.slice(); W = { i: 0, score: 0, state: null, wrong: [], hint: false }; render(); },
+  hint() { W.hint = true; const v = ($("#ans") || {}).value; render(); if ($("#ans")) $("#ans").value = v || ""; },
+  hide(el) { S.hide = el.dataset.v; render(); },
+  mark(el) { S.known[el.dataset.w] = el.checked; save(); render(); },
+  reveal(el) { el.classList.remove("hid"); }
+};
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]"); if (!el) return;
+  const a = el.dataset.act;
+  if (a === "speak") { e.stopPropagation(); }
+  if (actions[a]) actions[a](el);
+});
+document.addEventListener("keydown", e => {
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (e.target.id === "ans" && e.key === "Enter") { e.preventDefault(); W.state ? actions.wnext() : checkAnswer(); return; }
+  if (S.mode !== "cards" || tag === "input" || tag === "select" || tag === "button" || !D[C.i]) return;
+  if (e.key === " " || e.key === "Enter") { e.preventDefault(); actions.flip(); }
+  else if (e.key === "ArrowRight") nextCard(true);
+  else if (e.key === "ArrowLeft") nextCard(false);
+});
+$("#tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { S.mode = b.dataset.mode; render(); } });
+$("#dir").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { S.dir = b.dataset.dir; save(); reset(); } });
+$("#dict").addEventListener("change", e => { setDict(e.target.value); S.pool = "all"; save(); reset(); });
+$("#pool").addEventListener("change", e => { S.pool = e.target.value; save(); reset(); });
+$("#shuf").addEventListener("change", e => { S.shuffle = e.target.checked; save(); reset(); });
+
+reset();
+try { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } catch (e) {}
+</script>
+</body>
+</html>
