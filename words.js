@@ -4,7 +4,7 @@
 window.DICTS_DATA = [
   {
     id: "a",
-    name: "Umumiy so'zlar",
+    name: "20.10.26",
     words: [
       ["acquaint","tanishtirmoq / tanishmoq"],
       ["cemetery","qabriston"],
@@ -42,7 +42,7 @@ window.DICTS_DATA = [
   },
   {
     id: "b",
-    name: "Akademik fe'llar",
+    name: "22.10.26",
     words: [
       ["assert","qat'iy ta'kidlamoq","state firmly as true"],
       ["imply","nazarda tutmoq, ishora qilmoq","suggest without saying directly"],
