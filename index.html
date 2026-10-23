@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini App</title>
+    <!-- Telegram Web App API -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h2>Assalomu alaykum!</h2>
+    <button id="sendBtn">Ma'lumot yuborish</button>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Ilovani to'liq ekranda ochish
+
+        document.getElementById("sendBtn").addEventListener("click", () => {
+            tg.sendData("Tugma bosildi!"); 
+            tg.close(); // Ilovani yopish
+        });
+    </script>
+</body>
+</html>
