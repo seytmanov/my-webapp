@@ -66,4 +66,43 @@ window.DICTS_DATA = [
       ["comprise","iborat bo'lmoq","consist of; be made up of"]
     ]
   },
+    {
+    id: "d3",
+    name: "24.10.26",
+    words: [
+      ["abandon", "tark etmoq"],
+      ["ambitious", "shijoatli"],
+      ["bark", "vovullamoq"],
+      ["bay", "qo'ltiq"],
+      ["brilliant", "aqilli"],
+      ["chin", "jag'"],
+      ["complaint", "shikoyat"],
+      ["deaf", "kar"],
+      ["enthusiastic", "g'ayratli"],
+      ["expedition", "ekspeditsiya"],
+      ["horizon", "ufq"],
+      ["loyal", "sodiq"],
+      ["mayor", "shahar hokimi"],
+      ["mutual", "o'zaro"],
+      ["overweight", "semiz"],
+      ["refuge", "boshpana"],
+      ["restore", "tiklash"],
+      ["rub", "ishqalamoq"],
+      ["senses", "hislar"],
+      ["veterinarian", "veterinar"],
+      ["anniversary", "yilligi"],
+      ["arithmetic", "arifmetik"],
+      ["ashamed", "uyatli"],
+      ["burst", "portlash"],
+      ["carpenter", "duradgor"],
+      ["coal", "ko'mir"],
+      ["couch", "divan"],
+      ["drip", "tomchilamoq"],
+      ["elegant", "bashang"],
+      ["fabric", "mato"],
+      ["highlands", "tog'li hududlar"],
+      ["ivory", "fil suyagi"],
+      ["mill", "tegirmon"]
+    ]
+  },
 ];
