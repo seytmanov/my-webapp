@@ -142,6 +142,8 @@ button { cursor: pointer; }
 .li.known .en { color: var(--good); }
 .cell.hid { filter: blur(7px); cursor: pointer; user-select: none; }
 .def { color: var(--muted); font-style: italic; font-size: .98rem; overflow-wrap: anywhere; }
+.foot { text-align: center; color: var(--muted); font-size: .92rem; padding-top: 8px; }
+.foot a { color: var(--accent); font-weight: 700; text-decoration: none; }
 .empty { text-align: center; color: var(--muted); padding: 40px 10px; display: grid; gap: 12px; justify-items: center; }
 @media (max-width: 460px) { .li { grid-template-columns: 30px minmax(0, 1fr); } .li .uz { grid-column: 2; margin-top: -6px; } }
 @media (prefers-reduced-motion: reduce) { .card-in, .bar > i { transition: none; } }
@@ -175,6 +177,8 @@ button { cursor: pointer; }
   </nav>
 
   <main class="panel" id="main"></main>
+
+  <footer class="foot">Takliflar uchun: <a id="contact" href="https://t.me/samadseytmanov" target="_blank" rel="noopener">@samadseytmanov</a></footer>
 </div>
 
 <script>
@@ -206,7 +210,25 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify({ knownAll: S.k
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-function speak(w) { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
+const AUD = {};
+function fetchAudio(w) {
+  if (w in AUD) return Promise.resolve(AUD[w]);
+  return fetch("https://api.dictionaryapi.dev/v2/entries/en/" + encodeURIComponent(w))
+    .then(r => r.ok ? r.json() : [])
+    .then(j => {
+      let u = null;
+      (Array.isArray(j) ? j : []).forEach(e => (e.phonetics || []).forEach(p => { if (p.audio && (!u || /-us\./.test(p.audio))) u = p.audio; }));
+      AUD[w] = u; return u;
+    })
+    .catch(() => null);
+}
+function speak(w) {
+  const tts = () => { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} };
+  const play = u => { try { const a = new Audio(u); const p = a.play(); if (p && p.catch) p.catch(tts); } catch (e) { tts(); } };
+  if (AUD[w]) { play(AUD[w]); return; }
+  if (AUD[w] === null) { tts(); return; }
+  fetchAudio(w).then(u => u ? play(u) : tts());
+}
 
 let D = [], C, Q, W;
 function poolWords() {
@@ -333,6 +355,8 @@ function render() {
   head();
   $("#main").innerHTML = ({ cards: viewCards, quiz: viewQuiz, write: viewWrite, list: viewList })[S.mode]();
   const a = $("#ans"); if (a && !W.state) a.focus({ preventScroll: true });
+  const cur = { cards: [C.i, D[C.i]], quiz: [Q.i, D[Q.i]], write: [W.i, D[W.i]] }[S.mode];
+  if (cur) { if (cur[1]) fetchAudio(cur[1][0]); const nx = D[cur[0] + 1]; if (nx) fetchAudio(nx[0]); }
 }
 
 /* ---- actions ---- */
@@ -390,6 +414,9 @@ $("#dict").addEventListener("change", e => { setDict(e.target.value); S.pool = "
 $("#pool").addEventListener("change", e => { S.pool = e.target.value; save(); reset(); });
 $("#shuf").addEventListener("change", e => { S.shuffle = e.target.checked; save(); reset(); });
 
+$("#contact").addEventListener("click", e => {
+  try { if (Telegram.WebApp.openTelegramLink) { e.preventDefault(); Telegram.WebApp.openTelegramLink("https://t.me/samadseytmanov"); } } catch (err) {}
+});
 reset();
 try { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } catch (e) {}
 </script>
