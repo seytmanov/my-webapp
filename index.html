@@ -144,6 +144,7 @@ button { cursor: pointer; }
 .def { color: var(--muted); font-style: italic; font-size: .98rem; overflow-wrap: anywhere; }
 .foot { text-align: center; color: var(--muted); font-size: .92rem; padding-top: 8px; }
 .foot a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 32px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-weight: 600; text-align: center; box-shadow: var(--shadow); z-index: 20; }
 .empty { text-align: center; color: var(--muted); padding: 40px 10px; display: grid; gap: 12px; justify-items: center; }
 @media (max-width: 460px) { .li { grid-template-columns: 30px minmax(0, 1fr); } .li .uz { grid-column: 2; margin-top: -6px; } }
 @media (prefers-reduced-motion: reduce) { .card-in, .bar > i { transition: none; } }
@@ -179,6 +180,7 @@ button { cursor: pointer; }
   <main class="panel" id="main"></main>
 
   <footer class="foot">Takliflar uchun: <a id="contact" href="https://t.me/samadseytmanov" target="_blank" rel="noopener">@samadseytmanov</a></footer>
+  <div id="toast" class="toast" role="status" hidden></div>
 </div>
 
 <script>
@@ -210,24 +212,37 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify({ knownAll: S.k
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-const AUD = {};
-function fetchAudio(w) {
-  if (w in AUD) return Promise.resolve(AUD[w]);
-  return fetch("https://api.dictionaryapi.dev/v2/entries/en/" + encodeURIComponent(w))
-    .then(r => r.ok ? r.json() : [])
-    .then(j => {
-      let u = null;
-      (Array.isArray(j) ? j : []).forEach(e => (e.phonetics || []).forEach(p => { if (p.audio && (!u || /-us\./.test(p.audio))) u = p.audio; }));
-      AUD[w] = u; return u;
-    })
-    .catch(() => null);
+const AUDIO = new Audio();
+AUDIO.preload = "auto";
+let audioTry = 0, toastTimer;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+}
+function audioSources(w) {
+  const q = encodeURIComponent(w.toLowerCase());
+  return [
+    "audio/" + q + ".mp3",
+    "https://api.dictionaryapi.dev/media/pronunciations/en/" + q + "-us.mp3",
+    "https://api.dictionaryapi.dev/media/pronunciations/en/" + q + "-uk.mp3",
+    "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=" + q
+  ];
 }
 function speak(w) {
-  const tts = () => { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} };
-  const play = u => { try { const a = new Audio(u); const p = a.play(); if (p && p.catch) p.catch(tts); } catch (e) { tts(); } };
-  if (AUD[w]) { play(AUD[w]); return; }
-  if (AUD[w] === null) { tts(); return; }
-  fetchAudio(w).then(u => u ? play(u) : tts());
+  const list = audioSources(w), id = ++audioTry;
+  const attempt = k => {
+    if (id !== audioTry) return;
+    if (k >= list.length) { toast("Ovoz topilmadi. Internetni tekshiring."); return; }
+    AUDIO.onerror = () => attempt(k + 1);
+    AUDIO.src = list[k];
+    const p = AUDIO.play();
+    if (p && p.catch) p.catch(err => {
+      if (id !== audioTry || (err && err.name === "AbortError")) return;
+      if (err && err.name === "NotAllowedError") { toast("Ovozni ijro etishga ruxsat berilmadi. Telefon ovozini tekshiring."); return; }
+      attempt(k + 1);
+    });
+  };
+  attempt(0);
 }
 
 let D = [], C, Q, W;
@@ -355,8 +370,6 @@ function render() {
   head();
   $("#main").innerHTML = ({ cards: viewCards, quiz: viewQuiz, write: viewWrite, list: viewList })[S.mode]();
   const a = $("#ans"); if (a && !W.state) a.focus({ preventScroll: true });
-  const cur = { cards: [C.i, D[C.i]], quiz: [Q.i, D[Q.i]], write: [W.i, D[W.i]] }[S.mode];
-  if (cur) { if (cur[1]) fetchAudio(cur[1][0]); const nx = D[cur[0] + 1]; if (nx) fetchAudio(nx[0]); }
 }
 
 /* ---- actions ---- */
