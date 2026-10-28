@@ -105,4 +105,43 @@ window.DICTS_DATA = [
       ["mill", "tegirmon"]
     ]
   },
+    {
+    id: "d4",
+    name: "27.10.26",
+    words: [
+      ["ail", "ozor bermoq"],
+      ["ally", "ittifoqchi"],
+      ["boast", "maqtanmoq"],
+      ["bounce", "dukkilamoq"],
+      ["bully", "bezori"],
+      ["carbohydrate", "karbongidrat"],
+      ["crawl", "emaklamoq"],
+      ["defeat", "mag'lubiyat"],
+      ["dial", "terish"],
+      ["dominant", "dominant"],
+      ["mercy", "rahmdillik"],
+      ["nod", "bosh qimirlatmoq"],
+      ["opponent", "raqib"],
+      ["quarrel", "janjallashmoq"],
+      ["rival", "raqib"],
+      ["sore", "og'riq"],
+      ["sting", "nish, chaqmoq"],
+      ["strain", "tirishmoq"],
+      ["torture", "qiynoq"],
+      ["wrestle", "kurashmoq"],
+      ["absence", "yo'qlik"],
+      ["aloud", "ovoz chiqarib"],
+      ["bald", "kal"],
+      ["blanket", "ko'rpa"],
+      ["creep", "o'rmalamoq"],
+      ["divorce", "ajrashmoq"],
+      ["imitate", "taqlid qilish"],
+      ["infant", "chaqaloq"],
+      ["kidnap", "o'g'irlash"],
+      ["nap", "mizg'ish"],
+      ["nowhere", "hech qayerda"],
+      ["pat", "ohista urmoq"],
+      ["relief", "yengillik"]
+    ]
+  },
 ];
