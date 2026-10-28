@@ -210,75 +210,24 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify({ knownAll: S.k
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-// Inglizcha talaffuz: avval tayyor MP3 audio manbasini sinaydi,
-// audio topilmasa yoki yuklanmasa qurilmaning TTS ovoziga qaytadi.
-const audioCache = new Map();
-let currentAudio = null;
-
-async function speak(w) {
-  const word = String(w || "").trim();
-  if (!word) return;
-
-  try {
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-      currentAudio = null;
-    }
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-
-    let audioUrl = audioCache.get(word.toLowerCase());
-
-    if (audioUrl === undefined) {
-      // Ochiq Free Dictionary API: API kaliti talab qilinmaydi.
-      const response = await fetch(
-        "https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(word),
-        { method: "GET" }
-      );
-      if (!response.ok) throw new Error("Audio API javobi: HTTP " + response.status);
-
-      const data = await response.json();
-      const phonetics = (Array.isArray(data) ? data : [])
-        .flatMap(entry => Array.isArray(entry.phonetics) ? entry.phonetics : []);
-      const audios = phonetics
-        .map(item => item && item.audio ? item.audio : "")
-        .filter(url => typeof url === "string" && url.length > 0)
-        .map(url => url.startsWith("//") ? "https:" + url : url)
-        .filter(url => /^https:\/\//i.test(url));
-
-      // API ko‘pincha AQSH talaffuzini beradi; mavjud birinchi MP3 olinadi.
-      audioUrl = audios[0] || null;
-      audioCache.set(word.toLowerCase(), audioUrl);
-    }
-
-    if (audioUrl) {
-      const audio = new Audio(audioUrl);
-      audio.preload = "auto";
-      audio.volume = 1;
-      currentAudio = audio;
-      await audio.play();
-      return;
-    }
-
-    throw new Error("Bu so‘z uchun tayyor audio topilmadi.");
-  } catch (err) {
-    console.warn("Tayyor audio ishlamadi, TTS sinab ko‘riladi:", err);
-    try {
-      if ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window) {
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = "en-US";
-        utterance.rate = 0.85;
-        utterance.volume = 1;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
-      } else {
-        alert("Bu so‘z uchun audio topilmadi va qurilmada matnni ovozga aylantirish mavjud emas.");
-      }
-    } catch (ttsError) {
-      console.error("TTS xatosi:", ttsError);
-      alert("Ovoz ijro etilmadi. Internet va telefon ovoz sozlamalarini tekshiring.");
-    }
-  }
+const AUD = {};
+function fetchAudio(w) {
+  if (w in AUD) return Promise.resolve(AUD[w]);
+  return fetch("https://api.dictionaryapi.dev/v2/entries/en/" + encodeURIComponent(w))
+    .then(r => r.ok ? r.json() : [])
+    .then(j => {
+      let u = null;
+      (Array.isArray(j) ? j : []).forEach(e => (e.phonetics || []).forEach(p => { if (p.audio && (!u || /-us\./.test(p.audio))) u = p.audio; }));
+      AUD[w] = u; return u;
+    })
+    .catch(() => null);
+}
+function speak(w) {
+  const tts = () => { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} };
+  const play = u => { try { const a = new Audio(u); const p = a.play(); if (p && p.catch) p.catch(tts); } catch (e) { tts(); } };
+  if (AUD[w]) { play(AUD[w]); return; }
+  if (AUD[w] === null) { tts(); return; }
+  fetchAudio(w).then(u => u ? play(u) : tts());
 }
 
 let D = [], C, Q, W;
@@ -406,6 +355,8 @@ function render() {
   head();
   $("#main").innerHTML = ({ cards: viewCards, quiz: viewQuiz, write: viewWrite, list: viewList })[S.mode]();
   const a = $("#ans"); if (a && !W.state) a.focus({ preventScroll: true });
+  const cur = { cards: [C.i, D[C.i]], quiz: [Q.i, D[Q.i]], write: [W.i, D[W.i]] }[S.mode];
+  if (cur) { if (cur[1]) fetchAudio(cur[1][0]); const nx = D[cur[0] + 1]; if (nx) fetchAudio(nx[0]); }
 }
 
 /* ---- actions ---- */
