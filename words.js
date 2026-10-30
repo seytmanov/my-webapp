@@ -165,7 +165,7 @@ window.DICTS_DATA = [
       ["perfume", "atir"],
       ["pond", "hovuz"],
       ["proverb", "maqol"],
-      ["pursuit", "ta'qub qilish"],
+      ["pursuit", "ta'qib qilish"],
       ["recite", "takrorlamoq, qaytarmoq"],
       ["wilderness", "biyobon"],
       ["anticipate", "oldindan bilmoq"],
