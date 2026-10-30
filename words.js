@@ -146,7 +146,7 @@ window.DICTS_DATA = [
   },
     {
     id: "d5",
-    name: "30.10.26",
+    name: "29.10.26",
     words: [
       ["abnormal", "noodatiy"],
       ["bamboo", "bambuk"],
