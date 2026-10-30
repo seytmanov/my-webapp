@@ -144,4 +144,39 @@ window.DICTS_DATA = [
       ["relief", "yengillik"]
     ]
   },
+    {
+    id: "d5",
+    name: "30.10.26",
+    words: [
+      ["abnormal", "noodatiy"],
+      ["bamboo", "bambuk"],
+      ["blossom", "gullamoq"],
+      ["compass", "kompas"],
+      ["dialect", "lahja"],
+      ["dishonest", "yolg'onchi"],
+      ["dwarf", "mitti"],
+      ["ecosystem", "ekosistema"],
+      ["fatal", "ayanchli"],
+      ["impatient", "sabrsiz"],
+      ["leaf", "yaproq"],
+      ["manuscript", "qo'lyozmasi"],
+      ["marsh", "yaylov"],
+      ["patience", "sabr-toqat"],
+      ["perfume", "atir"],
+      ["pond", "hovuz"],
+      ["proverb", "maqol"],
+      ["pursuit", "ta'qub qilish"],
+      ["recite", "takrorlamoq, qaytarmoq"],
+      ["wilderness", "biyobon"],
+      ["anticipate", "oldindan bilmoq"],
+      ["barrel", "bochka"],
+      ["beam", "nur"],
+      ["casual", "oddiy"],
+      ["caution", "ehtiyotkorlik"],
+      ["contrary", "teskari"],
+      ["deliberate", "qasddan, atay"],
+      ["dissolve", "suyuqlikda erimoq"],
+      ["explode", "portlamoq"]
+    ]
+  },
 ];
