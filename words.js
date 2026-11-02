@@ -179,4 +179,40 @@ window.DICTS_DATA = [
       ["explode", "portlamoq"]
     ]
   },
+    {
+    id: "d6",
+    name: "31.10.26",
+    words: [
+      ["aboard", "bortda"],
+      ["bitter", "achchiq"],
+      ["bullet", "o'q"],
+      ["devil", "shayton"],
+      ["drift", "siljimoq"],
+      ["enforce", "majburlash"],
+      ["fountain", "fontan"],
+      ["harbor", "bandargoh"],
+      ["inhabit", "yashamoq"],
+      ["march", "qadam tashlamoq"],
+      ["millionaire", "millioner"],
+      ["port", "port"],
+      ["sheriff", "sherif"],
+      ["startle", "cho'chimoq"],
+      ["sweat", "terlamoq"],
+      ["trigger", "tepki"],
+      ["unify", "birlashtirmoq"],
+      ["vessel", "kema"],
+      ["voyage", "sayohat"],
+      ["worship", "ibodat qilmoq"],
+      ["apprentice", "shogird"],
+      ["assure", "ishontirmoq"],
+      ["bandage", "bint"],
+      ["bleed", "qonamoq"],
+      ["bond", "bog'lanmoq"],
+      ["chef", "oshpaz"],
+      ["crown", "toj"],
+      ["departure", "ketish"],
+      ["diligent", "mehnatsevar"],
+      ["emperor", "imperator"]
+    ]
+  },
 ];
