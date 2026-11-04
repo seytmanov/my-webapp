@@ -215,4 +215,41 @@ window.DICTS_DATA = [
       ["emperor", "imperator"]
     ]
   },
+    {
+    id: "d7",
+    name: "03.11.26",
+    words: [
+      ["affair", "munosabat"],
+      ["assembly", "yig'ilish"],
+      ["bless", "yorlaqamoq"],
+      ["cereal", "don"],
+      ["cheerful", "quvnoq"],
+      ["diameter", "diametr"],
+      ["exploit", "majburiy ishlatmoq"],
+      ["famine", "ochlik"],
+      ["harvest", "hosil"],
+      ["merry", "xushchaqchaq"],
+      ["nut", "yong'oq"],
+      ["pardon", "afv etish"],
+      ["pharaoh", "Fir'avn"],
+      ["ripe", "pishgan"],
+      ["roast", "qovurilgan"],
+      ["routine", "muntazam"],
+      ["scheme", "sxema"],
+      ["slim", "nozik"],
+      ["stove", "pechka"],
+      ["theft", "o'g'irlik"],
+      ["adolescent", "o'smir"],
+      ["aptitude", "qobiliyat"],
+      ["compliment", "iltifot"],
+      ["hinder", "to'siq qo'yish"],
+      ["journalism", "jurnalistika"],
+      ["jury", "hakamlar hay'ati"],
+      ["justice", "adolat"],
+      ["liberty", "ozodlik"],
+      ["literary", "adabiy"],
+      ["pharmacy", "dori darmon"],
+      ["pill", "hapdori"]
+    ]
+  },
 ];
