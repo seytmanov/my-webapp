@@ -215,7 +215,7 @@ window.DICTS_DATA = [
       ["emperor", "imperator"]
     ]
   },
-    {
+      {
     id: "d7",
     name: "03.11.26",
     words: [
@@ -239,6 +239,22 @@ window.DICTS_DATA = [
       ["slim", "nozik"],
       ["stove", "pechka"],
       ["theft", "o'g'irlik"],
+      ["fiber", "tola"],
+      ["horrible", "dahshatli"],
+      ["impolite", "qo'pol"],
+      ["kneel", "tizzalamoq"],
+      ["luxury", "hashamat"],
+      ["massive", "katta"],
+      ["panic", "vahima"],
+      ["priority", "ustuvorlik"],
+      ["robe", "xalat"],
+      ["scold", "tanbeh bermoq"]
+    ]
+  },
+    {
+    id: "d8",
+    name: "05.11.26",
+    words: [
       ["adolescent", "o'smir"],
       ["aptitude", "qobiliyat"],
       ["compliment", "iltifot"],
@@ -249,7 +265,26 @@ window.DICTS_DATA = [
       ["liberty", "ozodlik"],
       ["literary", "adabiy"],
       ["pharmacy", "dori darmon"],
-      ["pill", "hapdori"]
+      ["pill", "hapdori"],
+      ["presume", "taxmin qilish"],
+      ["privacy", "maxfiylik"],
+      ["punishment", "jazo"],
+      ["sensible", "aqlli"],
+      ["slice", "tilim"],
+      ["sorrow", "qayg'u"],
+      ["straw", "somon"],
+      ["swell", "shishmoq"],
+      ["tidy", "toza"],
+      ["affection", "muhabbat"],
+      ["agency", "agentlik"],
+      ["ash", "kul"],
+      ["confine", "saqlamoq"],
+      ["dismiss", "olib tashlamoq"],
+      ["erupt", "otilmoq"],
+      ["fate", "taqdir"],
+      ["lava", "lava"],
+      ["miserable", "bechora"],
+      ["navigate", "boshqarmoq"]
     ]
   },
 ];
