@@ -287,4 +287,40 @@ window.DICTS_DATA = [
       ["navigate", "boshqarmoq"]
     ]
   },
+    {
+    id: "d9",
+    name: "09.11.26",
+    words: [
+      ["originate", "kelib chiqmoq"],
+      ["remainder", "qoldiq"],
+      ["retrieve", "topib kelmoq"],
+      ["shallow", "sayoz"],
+      ["slope", "qiyalik"],
+      ["span", "kenglik"],
+      ["superstition", "insu-jins"],
+      ["sympathy", "hamdartlik, achinish"],
+      ["vibrate", "tebranmoq"],
+      ["wander", "sang'imoq"],
+      ["armor", "zirh"],
+      ["blare", "portlamoq (ko'rinish)"],
+      ["boom", "portlamoq (ovoz)"],
+      ["cliff", "qoya"],
+      ["flame", "alanga"],
+      ["independence", "mustaqillik"],
+      ["invasion", "bosqin"],
+      ["knight", "ritsar"],
+      ["lightning", "chaqmoq"],
+      ["rebel", "isyonchi"],
+      ["retreat", "chekinmoq"],
+      ["revolution", "inqilob"],
+      ["spear", "nayza"],
+      ["steep", "tik"],
+      ["summit", "cho'qqi"],
+      ["thunder", "momaqaldiroq"],
+      ["troops", "askarlar"],
+      ["warrior", "jangchi"],
+      ["withdraw", "olib tashlamoq"],
+      ["yield", "yo'l bermoq"]
+    ]
+  },
 ];
