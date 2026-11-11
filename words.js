@@ -323,4 +323,40 @@ window.DICTS_DATA = [
       ["yield", "yo'l bermoq"]
     ]
   },
+    {
+    id: "d10",
+    name: "11.11.26",
+    words: [
+      ["bench", "o'rindiq"],
+      ["confront", "qarshi turmoq"],
+      ["daisy", "moychechak"],
+      ["dispute", "kelishmovchilik"],
+      ["horror", "dahshat"],
+      ["incident", "hodisa"],
+      ["mist", "tuman"],
+      ["object", "ob'ekt"],
+      ["orphan", "yetim"],
+      ["plot", "reja"],
+      ["pregnant", "homilador"],
+      ["rage", "g'azab"],
+      ["revenge", "intiqom"],
+      ["shame", "sharmandalik"],
+      ["sigh", "xo'rsinmoq"],
+      ["sneak", "sezdirmasdan yurmoq"],
+      ["spare", "ortiqcha"],
+      ["stem", "tana"],
+      ["supper", "kechki ovqat"],
+      ["tender", "yumshoq"],
+      ["beneath", "ostida"],
+      ["cub", "ayiq bolasi"],
+      ["dawn", "tong"],
+      ["dissatisfied", "qoniqmagan"],
+      ["ease", "yengillik"],
+      ["evident", "aniq"],
+      ["hail", "do'l"],
+      ["howl", "uvullamoq"],
+      ["leap", "sakrash"],
+      ["magnificent", "ajoyib"]
+    ]
+  },
 ];
