@@ -359,10 +359,20 @@ window.DICTS_DATA = [
       ["magnificent", "ajoyib"]
     ]
   },
-    {
+      {
     id: "d11",
     name: "13.11.26",
     words: [
+      ["necessity", "majburiyat"],
+      ["outcome", "natija"],
+      ["pile", "uyum"],
+      ["profound", "aqilli"],
+      ["seize", "changallamoq"],
+      ["squeeze", "siqmoq"],
+      ["supreme", "oliy"],
+      ["terrific", "ajoyib"],
+      ["trait", "fazilat"],
+      ["vital", "hayotiy"],
       ["accustomed", "odat tusiga kirgan"],
       ["affirm", "tasdiqlamoq"],
       ["astonished", "hayratda qolgan"],
@@ -382,27 +392,7 @@ window.DICTS_DATA = [
       ["stiff", "qattiq"],
       ["stroke", "paypaslamoq"],
       ["tragic", "fojiali"],
-      ["tune", "sozlash"],
-      ["accommodate", "joylashtirish"],
-      ["circus", "sirk"],
-      ["coincide", "baravar bo'lmoq"],
-      ["commission", "haq to'lamoq"],
-      ["dose", "doza"],
-      ["dye", "bo'yoq"],
-      ["extent", "ko'lam"],
-      ["gender", "jins"],
-      ["headline", "sarlavha"],
-      ["informal", "norasmiy"],
-      ["inquire", "so'ramoq"],
-      ["messenger", "xabarchi"],
-      ["peer", "kuzatmoq"],
-      ["portrait", "portret"],
-      ["pose", "pozitsiya"],
-      ["ranch", "rancho"],
-      ["steer", "boshqarmoq"],
-      ["stripe", "yo'l-yo'l chiziq"],
-      ["tame", "qo'lga o'rgatilgan"],
-      ["tempt", "undamoq"]
+      ["tune", "sozlash"]
     ]
   },
 ];
