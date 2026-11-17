@@ -583,3 +583,4 @@ window.DICTS_DATA = [
       ["utilize", "foydalanmoq"]
     ]
   },
+  ];
