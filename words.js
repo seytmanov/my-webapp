@@ -1,6 +1,3 @@
-// Har kuni yangi lug'at qo'shish uchun: shu ro'yxat oxiriga yangi { id, name, words } blokini qo'shing.
-// Har so'z: ["inglizcha", "o'zbekcha", "ta'rif (ixtiyoriy)"]
-// id har lug'at uchun noyob va o'zgarmas bo'lsin (yodlash belgilari shunga bog'langan).
 window.DICTS_DATA = [
   {
     id: "a",
@@ -40,95 +37,10 @@ window.DICTS_DATA = [
       ["grasp","tushunib yetmoq / mahkam ushlab olmoq"]
     ]
   },
-  {
-    id: "b",
-    name: "22.10.26",
+{
+    id: "u10",
+    name: "Unit 10",
     words: [
-      ["assert","qat'iy ta'kidlamoq","state firmly as true"],
-      ["imply","nazarda tutmoq, ishora qilmoq","suggest without saying directly"],
-      ["illustrate","misol bilan tushuntirmoq","make clear with an example"],
-      ["underpin","asos bo'lmoq","form the basis of something"],
-      ["undermine","zaiflashtirmoq, putur yetkazmoq","weaken gradually"],
-      ["emphasise","urg'u bermoq","give special importance to"],
-      ["contradict","zid bo'lmoq, inkor etmoq","state the opposite of"],
-      ["acknowledge","tan olmoq, e'tirof etmoq","admit that something is true"],
-      ["presume","taxmin qilmoq","suppose something is true"],
-      ["encompass","qamrab olmoq","include a wide range of things"],
-      ["entail","talab qilmoq, keltirib chiqarmoq","involve as a necessary result"],
-      ["exemplify","yaqqol misol bo'lmoq","be a typical example of"],
-      ["elaborate","batafsil bayon qilmoq","explain in more detail"],
-      ["contend","da'vo qilmoq, bahslashmoq","argue that something is so"],
-      ["dispute","shubha ostiga olmoq","question the truth of something"],
-      ["justify","asoslamoq","show that something is reasonable"],
-      ["reconcile","kelishtirmoq, muvofiqlashtirmoq","make two ideas fit together"],
-      ["prioritise","ustuvor deb bilmoq","treat as most important"],
-      ["advocate","yoqlab chiqmoq","publicly support an idea"],
-      ["comprise","iborat bo'lmoq","consist of; be made up of"]
-    ]
-  },
-    {
-    id: "d3",
-    name: "24.10.26",
-    words: [
-      ["abandon", "tark etmoq"],
-      ["ambitious", "shijoatli"],
-      ["bark", "vovullamoq"],
-      ["bay", "qo'ltiq"],
-      ["brilliant", "aqilli"],
-      ["chin", "jag'"],
-      ["complaint", "shikoyat"],
-      ["deaf", "kar"],
-      ["enthusiastic", "g'ayratli"],
-      ["expedition", "ekspeditsiya"],
-      ["horizon", "ufq"],
-      ["loyal", "sodiq"],
-      ["mayor", "shahar hokimi"],
-      ["mutual", "o'zaro"],
-      ["overweight", "semiz"],
-      ["refuge", "boshpana"],
-      ["restore", "tiklash"],
-      ["rub", "ishqalamoq"],
-      ["senses", "hislar"],
-      ["veterinarian", "veterinar"],
-      ["anniversary", "yilligi"],
-      ["arithmetic", "arifmetik"],
-      ["ashamed", "uyatli"],
-      ["burst", "portlash"],
-      ["carpenter", "duradgor"],
-      ["coal", "ko'mir"],
-      ["couch", "divan"],
-      ["drip", "tomchilamoq"],
-      ["elegant", "bashang"],
-      ["fabric", "mato"],
-      ["highlands", "tog'li hududlar"],
-      ["ivory", "fil suyagi"],
-      ["mill", "tegirmon"]
-    ]
-  },
-    {
-    id: "d4",
-    name: "27.10.26",
-    words: [
-      ["ail", "ozor bermoq"],
-      ["ally", "ittifoqchi"],
-      ["boast", "maqtanmoq"],
-      ["bounce", "dukkilamoq"],
-      ["bully", "bezori"],
-      ["carbohydrate", "karbongidrat"],
-      ["crawl", "emaklamoq"],
-      ["defeat", "mag'lubiyat"],
-      ["dial", "terish"],
-      ["dominant", "dominant"],
-      ["mercy", "rahmdillik"],
-      ["nod", "bosh qimirlatmoq"],
-      ["opponent", "raqib"],
-      ["quarrel", "janjallashmoq"],
-      ["rival", "raqib"],
-      ["sore", "og'riq"],
-      ["sting", "nish, chaqmoq"],
-      ["strain", "tirishmoq"],
-      ["torture", "qiynoq"],
-      ["wrestle", "kurashmoq"],
       ["absence", "yo'qlik"],
       ["aloud", "ovoz chiqarib"],
       ["bald", "kal"],
@@ -141,12 +53,19 @@ window.DICTS_DATA = [
       ["nap", "mizg'ish"],
       ["nowhere", "hech qayerda"],
       ["pat", "ohista urmoq"],
-      ["relief", "yengillik"]
+      ["relief", "yengillik"],
+      ["reproduce", "nusxa yasamoq"],
+      ["rhyme", "qofiya"],
+      ["suck", "so'rmoq"],
+      ["urgent", "shoshilinch"],
+      ["vanish", "yo'qolmoq"],
+      ["wagon", "aravacha"],
+      ["wrinkle", "ajin"]
     ]
   },
-    {
-    id: "d5",
-    name: "29.10.26",
+  {
+    id: "u11",
+    name: "Unit 11",
     words: [
       ["abnormal", "noodatiy"],
       ["bamboo", "bambuk"],
@@ -167,7 +86,13 @@ window.DICTS_DATA = [
       ["proverb", "maqol"],
       ["pursuit", "ta'qib qilish"],
       ["recite", "takrorlamoq, qaytarmoq"],
-      ["wilderness", "biyobon"],
+      ["wilderness", "biyobon"]
+    ]
+  },
+  {
+    id: "u12",
+    name: "Unit 12",
+    words: [
       ["anticipate", "oldindan bilmoq"],
       ["barrel", "bochka"],
       ["beam", "nur"],
@@ -176,12 +101,23 @@ window.DICTS_DATA = [
       ["contrary", "teskari"],
       ["deliberate", "qasddan, atay"],
       ["dissolve", "suyuqlikda erimoq"],
-      ["explode", "portlamoq"]
+      ["explode", "portlamoq"],
+      ["fasten", "bog'lamoq"],
+      ["germ", "mikrob"],
+      ["kit", "to'plam"],
+      ["puff", "tutun"],
+      ["rag", "latta"],
+      ["scatter", "sochmoq"],
+      ["scent", "hid"],
+      ["steel", "po'lat"],
+      ["swift", "tezkor"],
+      ["toss", "otmoq tashlamoq"],
+      ["triumph", "g'alaba"]
     ]
   },
-    {
-    id: "d6",
-    name: "31.10.26",
+  {
+    id: "u13",
+    name: "Unit 13",
     words: [
       ["aboard", "bortda"],
       ["bitter", "achchiq"],
@@ -202,7 +138,13 @@ window.DICTS_DATA = [
       ["unify", "birlashtirmoq"],
       ["vessel", "kema"],
       ["voyage", "sayohat"],
-      ["worship", "ibodat qilmoq"],
+      ["worship", "ibodat qilmoq"]
+    ]
+  },
+  {
+    id: "u14",
+    name: "Unit 14",
+    words: [
       ["apprentice", "shogird"],
       ["assure", "ishontirmoq"],
       ["bandage", "bint"],
@@ -212,12 +154,22 @@ window.DICTS_DATA = [
       ["crown", "toj"],
       ["departure", "ketish"],
       ["diligent", "mehnatsevar"],
-      ["emperor", "imperator"]
+      ["emperor", "imperator"],
+      ["fiber", "tola"],
+      ["horrible", "dahshatli"],
+      ["impolite", "qo'pol"],
+      ["kneel", "tizzalamoq"],
+      ["luxury", "hashamat"],
+      ["massive", "katta"],
+      ["panic", "vahima"],
+      ["priority", "ustuvorlik"],
+      ["robe", "xalat"],
+      ["scold", "tanbeh bermoq"]
     ]
   },
-      {
-    id: "d7",
-    name: "03.11.26",
+  {
+    id: "u15",
+    name: "Unit 15",
     words: [
       ["affair", "munosabat"],
       ["assembly", "yig'ilish"],
@@ -238,22 +190,12 @@ window.DICTS_DATA = [
       ["scheme", "sxema"],
       ["slim", "nozik"],
       ["stove", "pechka"],
-      ["theft", "o'g'irlik"],
-      ["fiber", "tola"],
-      ["horrible", "dahshatli"],
-      ["impolite", "qo'pol"],
-      ["kneel", "tizzalamoq"],
-      ["luxury", "hashamat"],
-      ["massive", "katta"],
-      ["panic", "vahima"],
-      ["priority", "ustuvorlik"],
-      ["robe", "xalat"],
-      ["scold", "tanbeh bermoq"]
+      ["theft", "o'g'irlik"]
     ]
   },
-    {
-    id: "d8",
-    name: "05.11.26",
+  {
+    id: "u16",
+    name: "Unit 16",
     words: [
       ["adolescent", "o'smir"],
       ["aptitude", "qobiliyat"],
@@ -274,7 +216,13 @@ window.DICTS_DATA = [
       ["sorrow", "qayg'u"],
       ["straw", "somon"],
       ["swell", "shishmoq"],
-      ["tidy", "toza"],
+      ["tidy", "toza"]
+    ]
+  },
+  {
+    id: "u17",
+    name: "Unit 17",
+    words: [
       ["affection", "muhabbat"],
       ["agency", "agentlik"],
       ["ash", "kul"],
@@ -284,13 +232,7 @@ window.DICTS_DATA = [
       ["fate", "taqdir"],
       ["lava", "lava"],
       ["miserable", "bechora"],
-      ["navigate", "boshqarmoq"]
-    ]
-  },
-    {
-    id: "d9",
-    name: "09.11.26",
-    words: [
+      ["navigate", "boshqarmoq"],
       ["originate", "kelib chiqmoq"],
       ["remainder", "qoldiq"],
       ["retrieve", "topib kelmoq"],
@@ -298,9 +240,15 @@ window.DICTS_DATA = [
       ["slope", "qiyalik"],
       ["span", "kenglik"],
       ["superstition", "insu-jins"],
-      ["sympathy", "hamdartlik, achinish"],
+      ["sympathy", "hamdardlik, achinish"],
       ["vibrate", "tebranmoq"],
-      ["wander", "sang'imoq"],
+      ["wander", "sang'imoq"]
+    ]
+  },
+  {
+    id: "u18",
+    name: "Unit 18",
+    words: [
       ["armor", "zirh"],
       ["blare", "portlamoq (ko'rinish)"],
       ["boom", "portlamoq (ovoz)"],
@@ -323,9 +271,9 @@ window.DICTS_DATA = [
       ["yield", "yo'l bermoq"]
     ]
   },
-    {
-    id: "d10",
-    name: "11.11.26",
+  {
+    id: "u19",
+    name: "Unit 19",
     words: [
       ["bench", "o'rindiq"],
       ["confront", "qarshi turmoq"],
@@ -346,7 +294,13 @@ window.DICTS_DATA = [
       ["spare", "ortiqcha"],
       ["stem", "tana"],
       ["supper", "kechki ovqat"],
-      ["tender", "yumshoq"],
+      ["tender", "yumshoq"]
+    ]
+  },
+  {
+    id: "u20",
+    name: "Unit 20",
+    words: [
       ["beneath", "ostida"],
       ["cub", "ayiq bolasi"],
       ["dawn", "tong"],
@@ -356,13 +310,7 @@ window.DICTS_DATA = [
       ["hail", "do'l"],
       ["howl", "uvullamoq"],
       ["leap", "sakrash"],
-      ["magnificent", "ajoyib"]
-    ]
-  },
-      {
-    id: "d11",
-    name: "13.11.26",
-    words: [
+      ["magnificent", "ajoyib"],
       ["necessity", "majburiyat"],
       ["outcome", "natija"],
       ["pile", "uyum"],
@@ -372,7 +320,13 @@ window.DICTS_DATA = [
       ["supreme", "oliy"],
       ["terrific", "ajoyib"],
       ["trait", "fazilat"],
-      ["vital", "hayotiy"],
+      ["vital", "hayotiy"]
+    ]
+  },
+  {
+    id: "u21",
+    name: "Unit 21",
+    words: [
       ["accustomed", "odat tusiga kirgan"],
       ["affirm", "tasdiqlamoq"],
       ["astonished", "hayratda qolgan"],
@@ -395,4 +349,237 @@ window.DICTS_DATA = [
       ["tune", "sozlash"]
     ]
   },
-];
+  {
+    id: "u22",
+    name: "Unit 22",
+    words: [
+      ["accommodate", "joylashtirish"],
+      ["circus", "sirk"],
+      ["coincide", "baravar bo'lmoq"],
+      ["commission", "haq to'lamoq"],
+      ["dose", "doza"],
+      ["dye", "bo'yoq"],
+      ["extent", "ko'lam"],
+      ["gender", "jins"],
+      ["headline", "sarlavha"],
+      ["informal", "norasmiy"],
+      ["inquire", "so'ramoq"],
+      ["messenger", "xabarchi"],
+      ["peer", "kuzatmoq"],
+      ["portrait", "portret"],
+      ["pose", "pozitsiya"],
+      ["ranch", "rancho"],
+      ["steer", "boshqarmoq"],
+      ["stripe", "yo'l-yo'l chiziq"],
+      ["tame", "qo'lga o'rgatilgan"],
+      ["tempt", "undamoq"]
+    ]
+  },
+  {
+    id: "u23",
+    name: "Unit 23",
+    words: [
+      ["Aborigine", "Aborigin"],
+      ["ban", "taqiqlamoq"],
+      ["cautious", "ehtiyotkor"],
+      ["confess", "tan olmoq"],
+      ["cottage", "yozgi uy"],
+      ["daytime", "kunduzi"],
+      ["desperate", "istalgan"],
+      ["fade", "rangi o'chmoq"],
+      ["fierce", "shafqatsiz"],
+      ["gamble", "qimor"],
+      ["lawn", "maysazor"],
+      ["mow", "o'roq"],
+      ["outlaw", "noqonuniy"],
+      ["prospect", "istiqbol"],
+      ["purse", "sumka"],
+      ["rod", "tayoq"],
+      ["seldom", "kamdan-kam hollarda"],
+      ["shave", "soqol olmoq"],
+      ["terrified", "qo'rqqan"],
+      ["wizard", "sehrgar"]
+    ]
+  },
+  {
+    id: "u24",
+    name: "Unit 24",
+    words: [
+      ["bulb", "lampochka"],
+      ["bundle", "to'plam"],
+      ["cattle", "qoramol"],
+      ["flee", "qochmoq"],
+      ["graze", "o'tlamoq"],
+      ["greed", "ochko'zlik"],
+      ["herd", "poda"],
+      ["initiate", "boshlamoq"],
+      ["lane", "yo'l"],
+      ["luggage", "yuk"],
+      ["nerve", "asab"],
+      ["optimist", "optimist"],
+      ["parade", "parad"],
+      ["pave", "tosh yotqizmoq"],
+      ["phantom", "hayoliy"],
+      ["portable", "portativ"],
+      ["poster", "afisha"],
+      ["scratch", "tirnamoq"],
+      ["symphony", "simfoniya"],
+      ["widow", "beva ayol"]
+    ]
+  },
+  {
+    id: "u25",
+    name: "Unit 25",
+    words: [
+      ["circulate", "tarqatmoq"],
+      ["consequent", "natijada"],
+      ["derive", "ko'chirmoq"],
+      ["drown", "cho'kmoq"],
+      ["dynasty", "sulola"],
+      ["fraction", "qism"],
+      ["frost", "yaxlmalak"],
+      ["illusion", "illuziya"],
+      ["invade", "ishg'ol qilish"],
+      ["lieutenant", "leytenant"],
+      ["marine", "dengizdagi"],
+      ["merit", "qadr-qimmati"],
+      ["navy", "flot"],
+      ["polar", "qutbli"],
+      ["ray", "nur"],
+      ["resign", "iste'foga chiqmoq"],
+      ["suicide", "o'z joniga qasd qilish"],
+      ["tremble", "qaltirash"],
+      ["underlying", "asosiy"],
+      ["via", "orqali"]
+    ]
+  },
+  {
+    id: "u26",
+    name: "Unit 26",
+    words: [
+      ["alter", "o'zgartirmoq"],
+      ["aside", "chetda"],
+      ["autumn", "kuz"],
+      ["blend", "aralashtirmoq"],
+      ["collapse", "qulamoq"],
+      ["crush", "ezmoq"],
+      ["curve", "yoy"],
+      ["disgusting", "jirkanchli"],
+      ["drain", "oqova"],
+      ["embrace", "quchoqlamoq"],
+      ["envy", "hasad qilmoq"],
+      ["fireworks", "mushak"],
+      ["flour", "un"],
+      ["fuse", "yonadigan arqon"],
+      ["ginger", "zanjabil"],
+      ["jealous", "hasadchi"],
+      ["paste", "pasta, surtmoq"],
+      ["receipt", "chek"],
+      ["wipe", "artmoq"],
+      ["wire", "sim"]
+    ]
+  },
+  {
+    id: "u27",
+    name: "Unit 27",
+    words: [
+      ["acknowledge", "e'tirof etish"],
+      ["ambassador", "elchi"],
+      ["blonde", "mallasoch"],
+      ["conquer", "ishg'ol qilish"],
+      ["drag", "tortmoq"],
+      ["exaggerate", "oshirib ko'rsatmoq"],
+      ["heritage", "meros"],
+      ["insult", "haqorat qilmoq"],
+      ["meanwhile", "paytida"],
+      ["necklace", "marjon"],
+      ["noble", "oliyjanob"],
+      ["precious", "qimmatbaho"],
+      ["prejudice", "noto'g'ri tushuncha"],
+      ["rumor", "mish-mish"],
+      ["sin", "gunoh"],
+      ["spectacle", "manzara"],
+      ["stack", "g'aram"],
+      ["suspicious", "shubhali"],
+      ["tin", "qalay"],
+      ["vase", "vaza"]
+    ]
+  },
+  {
+    id: "u28",
+    name: "Unit 28",
+    words: [
+      ["ache", "og'riq"],
+      ["arctic", "arktik"],
+      ["canal", "kanal"],
+      ["chemist", "kimyogar"],
+      ["chill", "salqinlamoq"],
+      ["congress", "Kongress"],
+      ["dairy", "sut mahsulotlari"],
+      ["descend", "tushmoq"],
+      ["grocer", "baqqol"],
+      ["hesitate", "ikkilanmoq"],
+      ["institution", "muassasa"],
+      ["jog", "yugurmoq"],
+      ["merchant", "savdogar"],
+      ["poke", "bosmoq turtmoq"],
+      ["postpone", "kechiktirmoq"],
+      ["splash", "sepmoq"],
+      ["stubborn", "o'jar"],
+      ["suburb", "shahar cheti"],
+      ["tide", "to'lqin"],
+      ["tragedy", "fojia"]
+    ]
+  },
+  {
+    id: "u29",
+    name: "Unit 29",
+    words: [
+      ["bomb", "bomba"],
+      ["certificate", "sertifikat"],
+      ["circumstance", "vaziyat"],
+      ["coffin", "tobut"],
+      ["cope", "uddalamoq"],
+      ["criticism", "tanqid"],
+      ["devastate", "vayron qilmoq"],
+      ["frown", "qovoq o'ymoq"],
+      ["gaze", "qaramoq"],
+      ["glance", "qarash"],
+      ["grief", "qayg'u"],
+      ["groom", "kuyov"],
+      ["license", "litsenziya"],
+      ["microscope", "mikroskop"],
+      ["nuclear", "yadroviy"],
+      ["portray", "ko'rsatmoq"],
+      ["rotate", "aylantirmoq"],
+      ["souvenir", "estalik"],
+      ["submarine", "batiskaf"],
+      ["trace", "iz"]
+    ]
+  },
+  {
+    id: "u30",
+    name: "Unit 30",
+    words: [
+      ["appliance", "qurilma"],
+      ["basin", "havza"],
+      ["broom", "supurgi"],
+      ["caterpillar", "kapalak qurti"],
+      ["cupboard", "javon"],
+      ["delicate", "nozik"],
+      ["emerge", "paydo bo'lmoq"],
+      ["handicap", "falajlik"],
+      ["hook", "ilmoq"],
+      ["hop", "sakramoq"],
+      ["laundry", "kir kiyim"],
+      ["pursue", "ta'qib qilish"],
+      ["reluctant", "istamay"],
+      ["sleeve", "yeng"],
+      ["spine", "umurtqa"],
+      ["stain", "dog'"],
+      ["strip", "plyonka"],
+      ["swear", "ont ichmoq"],
+      ["swing", "belanchak"],
+      ["utilize", "foydalanmoq"]
+    ]
+  },
