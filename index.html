@@ -53,7 +53,8 @@ body {
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
+.wrap { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.wrap > *, .panel > * { min-width: 0; }
 h1 { font-family: var(--font-display); font-size: 1.9rem; line-height: 1.1; margin: 0; text-wrap: balance; }
 button, select, input { font: inherit; color: inherit; }
 button { cursor: pointer; }
@@ -70,7 +71,7 @@ button { cursor: pointer; }
 .controls select, .seg, .chk {
   background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-height: 40px;
 }
-.controls select { padding: 0 10px; }
+.controls select { padding: 0 10px; max-width: 100%; }
 .seg { display: inline-flex; padding: 3px; gap: 3px; }
 .seg button { border: 0; background: transparent; padding: 0 12px; border-radius: 7px; min-height: 32px; color: var(--muted); font-weight: 600; }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
@@ -81,7 +82,7 @@ button { cursor: pointer; }
 .tabs button { border: 0; background: transparent; padding: 8px 14px; border-radius: 9px; font-weight: 700; color: var(--muted); white-space: nowrap; }
 .tabs button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); }
 
-.panel { display: grid; gap: 14px; }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
 .meta { display: flex; justify-content: space-between; color: var(--muted); font-size: .92rem; font-variant-numeric: tabular-nums; }
 
 /* flip card */
@@ -160,6 +161,7 @@ button { cursor: pointer; }
     <div class="bar" role="progressbar" aria-label="Yodlash jarayoni" aria-valuemin="0" aria-valuemax="100"><i id="bar"></i></div>
     <div class="controls">
       <select id="dict" aria-label="Lug'at"></select>
+      <select id="dict2" aria-label="Birga yodlash uchun ikkinchi lug'at"></select>
       <select id="pool" aria-label="So'zlar to'plami"></select>
       <div class="seg" id="dir" role="group" aria-label="Yo'nalish">
         <button type="button" data-dir="en">EN → UZ</button>
@@ -189,50 +191,40 @@ if (!window.DICTS_DATA || !window.DICTS_DATA.length) {
 const DICTS = {};
 let LAST = "";
 window.DICTS_DATA.forEach(d => {
-  DICTS[d.id] = { name: d.name, words: d.words.map((w, i) => [w[0], w[1], Math.floor(i / 10), w[2] || ""]) };
+  DICTS[d.id] = { name: d.name, words: d.words.map((w, i) => [w[0], w[1], Math.floor(i / 10), w[2] || "", d.id]) };
   LAST = d.id;
 });
 let WORDS = [];
 const KEY = "lugat-v1";
-const S = { known: {}, knownAll: { a: {}, b: {} }, dict: LAST, pool: "all", dir: "en", shuffle: false, mode: "cards", hide: "none" };
+const S = { known: {}, knownAll: { a: {}, b: {} }, dict: LAST, dict2: "", pool: "all", dir: "en", shuffle: false, mode: "cards", hide: "none" };
 try {
   const r = JSON.parse(localStorage.getItem(KEY) || "{}");
   if (r.knownAll) S.knownAll = Object.assign({ a: {}, b: {} }, r.knownAll);
   if (r.dict && DICTS[r.dict]) S.dict = r.dict;
+  if (r.dict2 && DICTS[r.dict2]) S.dict2 = r.dict2;
   ["pool", "dir", "shuffle"].forEach(k => { if (r[k] !== undefined) S[k] = r[k]; });
 } catch (e) {}
-function setDict(id) { S.dict = id; WORDS = DICTS[id].words; S.known = S.knownAll[id] = S.knownAll[id] || {}; }
+function setDict(id, id2) {
+  S.dict = id; S.dict2 = id2 && id2 !== id && DICTS[id2] ? id2 : "";
+  const src = DICTS[id].words.concat(S.dict2 ? DICTS[S.dict2].words : []);
+  WORDS = src.map((w, i) => [w[0], w[1], Math.floor(i / 10), w[3], w[4]]);
+  [id, S.dict2].forEach(k => { if (k) S.knownAll[k] = S.knownAll[k] || {}; });
+}
+const isK = w => !!(S.knownAll[w[4]] && S.knownAll[w[4]][w[0]]);
+function setK(w, v) { (S.knownAll[w[4]] = S.knownAll[w[4]] || {})[w[0]] = v; }
 if (!DICTS[S.dict]) S.dict = LAST;
-setDict(S.dict);
+setDict(S.dict, S.dict2);
 if (S.pool !== "all" && S.pool !== "hard" && !WORDS.some(w => S.pool === "c" + w[2])) S.pool = "all";
-function save() { try { localStorage.setItem(KEY, JSON.stringify({ knownAll: S.knownAll, dict: S.dict, pool: S.pool, dir: S.dir, shuffle: S.shuffle })); } catch (e) {} }
+function save() { try { localStorage.setItem(KEY, JSON.stringify({ knownAll: S.knownAll, dict: S.dict, dict2: S.dict2, pool: S.pool, dir: S.dir, shuffle: S.shuffle })); } catch (e) {} }
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-const AUD = {};
-function fetchAudio(w) {
-  if (w in AUD) return Promise.resolve(AUD[w]);
-  return fetch("https://api.dictionaryapi.dev/v2/entries/en/" + encodeURIComponent(w))
-    .then(r => r.ok ? r.json() : [])
-    .then(j => {
-      let u = null;
-      (Array.isArray(j) ? j : []).forEach(e => (e.phonetics || []).forEach(p => { if (p.audio && (!u || /-us\./.test(p.audio))) u = p.audio; }));
-      AUD[w] = u; return u;
-    })
-    .catch(() => null);
-}
-function speak(w) {
-  const tts = () => { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} };
-  const play = u => { try { const a = new Audio(u); const p = a.play(); if (p && p.catch) p.catch(tts); } catch (e) { tts(); } };
-  if (AUD[w]) { play(AUD[w]); return; }
-  if (AUD[w] === null) { tts(); return; }
-  fetchAudio(w).then(u => u ? play(u) : tts());
-}
+function speak(w) { try { const u = new SpeechSynthesisUtterance(w); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
 
 let D = [], C, Q, W;
 function poolWords() {
-  return WORDS.filter(w => S.pool === "all" || (S.pool === "hard" && !S.known[w[0]]) || S.pool === "c" + w[2]);
+  return WORDS.filter(w => S.pool === "all" || (S.pool === "hard" && !isK(w)) || S.pool === "c" + w[2]);
 }
 function reset() {
   D = poolWords(); if (S.shuffle) D = shuffle(D);
@@ -244,8 +236,11 @@ function reset() {
 let poolSig = "";
 function buildSelects() {
   const dsel = $("#dict");
-  if (!dsel.options.length) dsel.innerHTML = Object.keys(DICTS).map(k => `<option value="${esc(k)}">${esc(DICTS[k].name)}</option>`).join("");
-  const sig = S.dict + ":" + WORDS.length;
+  if (!dsel.options.length) {
+    dsel.innerHTML = Object.keys(DICTS).map(k => `<option value="${esc(k)}">${esc(DICTS[k].name)}</option>`).join("");
+    $("#dict2").innerHTML = `<option value="">+ Birga: yo'q</option>` + Object.keys(DICTS).map(k => `<option value="${esc(k)}">+ ${esc(DICTS[k].name)}</option>`).join("");
+  }
+  const sig = S.dict + "+" + S.dict2 + ":" + WORDS.length;
   if (sig !== poolSig) {
     poolSig = sig;
     let o = `<option value="all">Hammasi (${WORDS.length})</option>`;
@@ -256,10 +251,10 @@ function buildSelects() {
     o += `<option value="hard">Yodlanmaganlar</option>`;
     $("#pool").innerHTML = o;
   }
-  dsel.value = S.dict; $("#pool").value = S.pool;
+  dsel.value = S.dict; $("#dict2").value = S.dict2; $("#pool").value = S.pool;
 }
 function head() {
-  const n = WORDS.filter(w => S.known[w[0]]).length;
+  const n = WORDS.filter(isK).length;
   $("#kn").textContent = n; $("#tt").textContent = WORDS.length;
   $("#bar").style.width = (n / WORDS.length * 100) + "%";
   $(".bar").setAttribute("aria-valuenow", Math.round(n / WORDS.length * 100));
@@ -342,8 +337,8 @@ function viewList() {
   const list = poolWords();
   const seg = ["none", "Hammasi", "en", "Inglizchani yashir", "uz", "O'zbekchani yashir"];
   const btns = []; for (let i = 0; i < seg.length; i += 2) btns.push(`<button type="button" data-act="hide" data-v="${seg[i]}" aria-pressed="${S.hide === seg[i]}">${seg[i + 1]}</button>`);
-  const rows = list.map(w => `<div class="li ${S.known[w[0]] ? "known" : ""}">
-    <input type="checkbox" data-act="mark" data-w="${esc(w[0])}" ${S.known[w[0]] ? "checked" : ""} aria-label="${esc(w[0])} yodlandi">
+  const rows = list.map(w => `<div class="li ${isK(w) ? "known" : ""}">
+    <input type="checkbox" data-act="mark" data-w="${esc(w[0])}" data-d="${esc(w[4])}" ${isK(w) ? "checked" : ""} aria-label="${esc(w[0])} yodlandi">
     <div class="en cell ${S.hide === "en" ? "hid" : ""}" data-act="reveal">${esc(w[0])} <button class="speak" data-act="speak" data-w="${esc(w[0])}" aria-label="Eshitish" style="min-height:28px;padding:0 8px">&#128266;</button></div>
     <div class="uz cell ${S.hide === "uz" ? "hid" : ""}" data-act="reveal">${esc(w[1])}${dfn(w)}</div></div>`).join("");
   return `<div class="meta"><span>Katakchani belgilang: yodlandi</span><span>${list.length} ta so'z</span></div>
@@ -355,20 +350,18 @@ function render() {
   head();
   $("#main").innerHTML = ({ cards: viewCards, quiz: viewQuiz, write: viewWrite, list: viewList })[S.mode]();
   const a = $("#ans"); if (a && !W.state) a.focus({ preventScroll: true });
-  const cur = { cards: [C.i, D[C.i]], quiz: [Q.i, D[Q.i]], write: [W.i, D[W.i]] }[S.mode];
-  if (cur) { if (cur[1]) fetchAudio(cur[1][0]); const nx = D[cur[0] + 1]; if (nx) fetchAudio(nx[0]); }
 }
 
 /* ---- actions ---- */
 function nextCard(ok) {
   const w = D[C.i]; if (!w) return;
-  S.known[w[0]] = ok; save(); ok ? C.got++ : C.again++; C.i++; C.flip = false; render();
+  setK(w, ok); save(); ok ? C.got++ : C.again++; C.i++; C.flip = false; render();
 }
 function checkAnswer() {
   const w = D[W.i], v = ($("#ans").value || "").trim().toLowerCase();
   if (!v) return;
-  if (v === w[0]) { W.state = "right"; W.score++; S.known[w[0]] = true; }
-  else { W.state = "wrong"; W.wrong.push(w); S.known[w[0]] = false; }
+  if (v === w[0]) { W.state = "right"; W.score++; setK(w, true); }
+  else { W.state = "wrong"; W.wrong.push(w); setK(w, false); }
   save(); render();
 }
 const actions = {
@@ -381,7 +374,7 @@ const actions = {
   pick(el) {
     if (Q.sel !== null) return;
     Q.sel = +el.dataset.i; const w = D[Q.i];
-    if (Q.opts[Q.sel] === Q.correct) { Q.score++; S.known[w[0]] = true; } else { Q.wrong.push(w); S.known[w[0]] = false; }
+    if (Q.opts[Q.sel] === Q.correct) { Q.score++; setK(w, true); } else { Q.wrong.push(w); setK(w, false); }
     save(); render();
   },
   qnext() { Q.i++; makeOpts(); render(); },
@@ -391,7 +384,7 @@ const actions = {
   wwrong() { D = W.wrong.slice(); W = { i: 0, score: 0, state: null, wrong: [], hint: false }; render(); },
   hint() { W.hint = true; const v = ($("#ans") || {}).value; render(); if ($("#ans")) $("#ans").value = v || ""; },
   hide(el) { S.hide = el.dataset.v; render(); },
-  mark(el) { S.known[el.dataset.w] = el.checked; save(); render(); },
+  mark(el) { const o = WORDS.find(x => x[0] === el.dataset.w && x[4] === el.dataset.d); if (o) setK(o, el.checked); save(); render(); },
   reveal(el) { el.classList.remove("hid"); }
 };
 document.addEventListener("click", e => {
@@ -410,7 +403,8 @@ document.addEventListener("keydown", e => {
 });
 $("#tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { S.mode = b.dataset.mode; render(); } });
 $("#dir").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { S.dir = b.dataset.dir; save(); reset(); } });
-$("#dict").addEventListener("change", e => { setDict(e.target.value); S.pool = "all"; save(); reset(); });
+$("#dict").addEventListener("change", e => { setDict(e.target.value, S.dict2); S.pool = "all"; save(); reset(); });
+$("#dict2").addEventListener("change", e => { setDict(S.dict, e.target.value); S.pool = "all"; save(); reset(); });
 $("#pool").addEventListener("change", e => { S.pool = e.target.value; save(); reset(); });
 $("#shuf").addEventListener("change", e => { S.shuffle = e.target.checked; save(); reset(); });
 
